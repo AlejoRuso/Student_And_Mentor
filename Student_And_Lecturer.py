@@ -1,3 +1,10 @@
+def __lt__(self, other):
+    return self.grades < other.gredes
+
+def __eq__(self, other):
+    return self.grade == other.grade
+
+
 class Student:
     def __init__(self, name, surname, gender):
         self.name = name
@@ -6,6 +13,16 @@ class Student:
         self.finished_courses = []
         self.courses_in_progress = []
         self.grades = {}
+
+    def rate_lecturer(self, lecturer, course, grade):
+        if isinstance(lecturer, Lecturer) and course in self.courses_in_progress or course in self.finished_courses and course in lecturer.courses_attached:
+            if course in lecturer.grades:
+                lecturer.grades[course] += [grade]
+            else:
+                lecturer.grades[course] = [grade]
+        else:
+            return 'Ошибка'
+
         
 class Mentor:
     def __init__(self, name, surname):
@@ -19,7 +36,7 @@ class Lecturer(Mentor):
     def __init__(self, name, surname):
         super().__init__(name, surname)
         self.grade = {}
-        
+        self.courses = []
 class Reviewer(Mentor):
     def __init__(self, name, surname):
         super().__init__(name, surname)
