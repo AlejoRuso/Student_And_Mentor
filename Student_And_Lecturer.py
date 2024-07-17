@@ -23,6 +23,24 @@ class Student:
         else:
             return 'Ошибка'
 
+    def add_courses(self, course_name):
+        self.finished_courses.append(course_name)
+        
+    def average_grade(self):
+        grade_count = 0
+        grade_sum = 0
+        for i in self.grades:
+            for x in self.grades[i]:
+                grade_sum += x
+                grade_count += 1
+        if grade_count == 0:
+            return 0
+        else:
+            return grade_sum / grade_count
+    
+    
+    def __str__(self):
+        return (f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашнее задание: {self.average_grade()}\nКурсы в процессе изучения: {", ".join(self.courses_in_progress)}\nЗавершенные курсы: {", ".join(self.finished_courses)}')  
         
 class Mentor:
     def __init__(self, name, surname):
@@ -35,8 +53,24 @@ class Mentor:
 class Lecturer(Mentor):
     def __init__(self, name, surname):
         super().__init__(name, surname)
-        self.grade = {}
-        self.courses = []
+        self.grades = {}
+        
+    def average_grade(self):
+        grade_count = 0
+        grade_sum = 0
+        for i in self.grades:
+            for x in self.grades[i]:
+                grade_sum += x
+                grade_count += 1
+        if grade_count == 0:
+            return 0
+        else:
+            return grade_sum / grade_count         
+        
+    def __str__(self):
+        return (f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: {self.average_grade()}')         
+        
+        
 class Reviewer(Mentor):
     def __init__(self, name, surname):
         super().__init__(name, surname)
@@ -50,3 +84,57 @@ class Reviewer(Mentor):
                 student.grades[course] = [grade]
         else:
             return 'Ошибка'
+    def __str__(self):
+        return (f'Имя: {self.name}\nФамилия: {self.surname}')        
+    
+
+lecturer1 = Lecturer('Олег', 'Булыгин')
+lecturer1.courses_attached = ['Python', 'OOP']
+
+lecturer2 = Lecturer('Елена', 'Никитина')
+lecturer2.courses_attached = ['Python','OOP']
+        
+student1 = Student('Иванов', 'Иван', 'мужской')
+student1.courses_in_progress += ['OOP']
+student1.finished_courses += ['Python']
+student1.rate_lecturer(lecturer1,'Python',10)
+student1.rate_lecturer(lecturer2,'Python',8)
+
+student2 = Student('Сидоров', 'Петр', 'мужской')
+student2.courses_in_progress += ['Python']
+student2.finished_courses += ['OOP']
+student2.rate_lecturer(lecturer1,'Python',10)
+student2.rate_lecturer(lecturer2,'Python',9)
+
+
+reviewer1 = Reviewer('Батицкая', 'Алена')
+reviewer1.courses_attached += ['Python']
+reviewer1.courses_attached += ['OOP']
+reviewer1.rate_hw(student1, 'Python', 10)
+reviewer1.rate_hw(student1, 'OOP', 5)
+reviewer1.rate_hw(student2, 'Python', 8)
+reviewer1.rate_hw(student2, 'OOP', 8)
+
+reviewer2 = Reviewer('Петрова', 'Мария')
+reviewer2.courses_attached += ['Python']
+reviewer2.courses_attached += ['OOP']
+reviewer2.rate_hw(student1, 'Python', 5)
+reviewer2.rate_hw(student1, 'OOP', 5)
+reviewer2.rate_hw(student2, 'Python', 9)
+reviewer2.rate_hw(student2, 'OOP', 10)
+
+
+
+
+
+print('Студенты:')
+print(student1)
+print(student2)
+print('')
+print('Проверяющие:')
+print(reviewer1)
+print(reviewer2)
+print('')
+print('Лекторы:')
+print(lecturer1)
+print(lecturer2)
